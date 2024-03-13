@@ -1,9 +1,5 @@
 # Présentation du corpus (+ très important : le nom)
 
-NOTE : les exemples sont 1) tirés de notre corpus, 2) tirés de notre imagination et 3) tirés de la thèse de Lichao Zhu.
-
-## Résumé général
-
 Notre corpus contient 600 tweets annotés. On y retrouve 2 types d'annotations :
 
 - annotation 1 : on indique pour chaque tweet s'il contient une expression défigée ou non (et si on reconnait l'expression figée sur laquelle le défigement se base) ;
@@ -13,17 +9,16 @@ Nous avons déjà réalisé l'annotation 1, ce qui nous a permi d'identifier 138
 
 - elle permet de vérifier que ce que nous avons annoté comme défigé est correct (exemple : "le beurre, l'argent du beurre et le cul de la crémière" a parfois été annoté comme défigement de "le beurre et l'argent du beurre", ce qui me semble incorrect) ;
 - elle permet d'extraire le défigement du tweet ;
-- elle permet d'annoter les modifications occurant entre l'expression figée d'origine et son défigement (principalement substitution, modification, addition et suppression)
+- elle permet d'annoter les modifications occurant entre l'expression figée d'origine et son défigement (principalement substitution, modification, insertion et suppression)
 
 Nous revenons plus en détail sur l'annotation par la suite.
 
 ## Titre du corpus
 
-Avec Marceau nous avions pensé à nommer le corpus APPLE : Annotating Possible Puns in Linguistic Expressions.
-Qu'en pensez-vous ? On reste dans le thème du FrUIT (nom du 1er corpus).
+(Merci à Marceau pour son aide sur le titre)
 
-Sinon l'autre option est de garder FrUIT dans le titre et d'ajouter quelque chose, vu que ce corpus en est dérivé. Au choix donc.
-exemple : FrUIT_Liquor
+On pourrait nommer le corpus APPLE : Annotating Possible Puns in Linguistic Expressions.
+Qu'en pensez-vous ? On reste dans le thème du FrUIT (nom du 1er corpus).
 
 # Procédé de notre phase d'annotation
 
@@ -31,25 +26,29 @@ exemple : FrUIT_Liquor
 
 On cherche à annoter les choses suivantes :
 
-- les mots appartenant à l'expression défigée recherchée
-- le type d'opération ayant mené à la création de cette expression défigée
+- les mots appartenant à l'expression défigée recherchée ;
+- le type d'opération ayant mené à la création de cette expression défigée.
 
 ## Annotation du procédé de défigement
 
 les opérations sont les suivantes :
 
 - Aucune (X) : un mot est le même entre le figement et le défigement ;
-- Modification (M) : un mot du figement a subi une modification dans le défigement ayant un impact sémantique (exemple : "que" deviens "qu'" n'appartient pas forcément au procédé amenant au défigement, une conjugaison différente ou un changement de temps également)
-- Substitution (S) : un mot du figement est remplacé par un autre mot ;
-- Addition (A) : un mot qui n'était pas présent dans le figement a été ajouté dans le défigement ;
-- Suppression : on ne l'annote pas, on la constatera en comparant les deux séquences.
 
-Le fichier d'annotation est conçu pour permettre une annotation à chaque mot. Seuls les mots appartenant à un défigement sont à annoter.
-On annote une opération en utilisant sa première lettre (X,M,S ou A). Se référer aux exemples plus bas pour plus de précisions.
+- Modification (M) : un mot du figement a subi une modification formelle et sémantique dans le défigement (exemple : "que" qui devient "qu'" ne pourra pas être considéré comme une modification, une conjugaison différente ou un changement de temps également)
+- Substitution (S) : un mot du figement est remplacé par un autre mot ;
+- Insertion (I) : un mot qui n'était pas présent dans le figement a été ajouté dans le défigement ;
+
+- Suppression : on ne l'annote pas, on la constatera en comparant les deux séquences (défigement identifié et figement d'origine);
+- Changement d'ordre des mots d'une séquence : idem, on pourra la constater plus tard en comparant les deux séquences. 
+
+Le fichier d'annotation est conçu pour permettre une annotation à chaque mot. Seuls les mots appartenant à un défigement sont à annoter. On annote une opération en utilisant sa première lettre (X,M,S ou I). Se référer aux exemples plus bas pour plus de précisions.
+
+Dernière précision : comme Gaël l'a remarqué, on a parfois une autre expression dans que celle qu'on étudie dans un tweet. Pour ce genre de cas (et pour les cas qu'on ne peut pas traiter avec le schéma d'annotation mis en place), j'ai rajouté une ligne "remarque" pour chaque tweet dans le fichier CSV à annoter. Tous les tweets contenant une remarque seront abordés lors de nos réunions d'adjudication, donc n'hésitez pas à faire remonter des incohérences / des questions dans cette ligne.
 
 ## Fichier d'annotation
 
-Le fichier CSV prévu pour l'annotation n'est pas terrible, je préfère être honnête avec vous. On va essayer avec et on verra comment on peut l' améliorer / le changer par la suite.
+Le fichier CSV prévu pour l'annotation n'est pas terrible, je préfère être honnête avec vous. On va essayer de faire avec et on verra comment on peut l' améliorer / le changer par la suite.
 En gros le fichier suit la structure suivante :
 
 ligne 0 TWEET en entier
@@ -61,70 +60,85 @@ Se référer aux exemples ci-après pour plus de précisions.
 
 ## Quelques exemples
 
+NOTE : les exemples sont 1) tirés de notre corpus, 2) tirés de notre imagination et 3) tirés de la thèse de Lichao Zhu.
+
 ### Substitution 
 
+Dans le cas d'une substitution, on précise quel est le mot substitué ("moins" remplace "plus" dans l'exemple 1, donc on annote S pour substitution et on précise qu'il substitue "plus" : "S:plus".
+
+EXEMPLE 1
 ligne 1 tweet = Je suis saoulé par les gens qui veulent travailler moins pour gagner plus
 ligne 2 seed = travailler plus pour gagner plus
 ligne 3 Je | suis | saoulé | par | les | gens | qui | veulent | travailler | moins    | pour | gagner | plus
 ligne 4    |      |        |     |     |      |     |         |     X      | S:plus   |  X   |   X    |  X
 
-### Ajout
+Quand on a un mot qui est modifié de manière à donner un autre mot mais qu'on reconnait toujours ce mot dans le défigement, on peut l'annoter "MS", ce qui signifie modification + substitution. Voir l'exemple 2.
 
-ligne 5 tweet = Macron démission ! casse-toi pauvre gros con !
-ligne 6 seed = casse-toi pauvre con !
-ligne 7 Macron | démission | ! | casse | toi | pauvre | gros | con | !
-ligne 8        |           |   |   X   |  X  |   X    |  A   |  X  | X
+EXEMPLE 2
+ligne 1 tweet = Touche pas à mon despote
+ligne 2 seed = Touche pas à mon pote
+ligne 3 Touche | pas | à | mon | despote
+ligne 4   X    |  X  | X |  X  | MS:pote 
+
+Dans l'exemple 2, on fait ainsi la différence entre deux types de substitutions créant des défigements : celles jouant sur la morphologie d'un mot ("pote" qui devient "despote", similaires morphologiquement) et celles jouant sur un autre procédé (sémantique pour "moins" substituant "plus").
+
+### Insertion
+
+EXEMPLE 3
+ligne 1 tweet = Macron démission ! casse-toi pauvre gros con !
+ligne 2 seed = casse-toi pauvre con !
+ligne 3 Macron | démission | ! | casse | toi | pauvre | gros | con | !
+ligne 4        |           |   |   X   |  X  |   X    |  I   |  X  | X
 
 ### Changement d'ordre des mots de l'énoncé
 
-On capture ce changement sans avoir besoin de faire annoter l'ordre des mots par les annotateurs.
-ici, "avec" n'aura pas la même place dans l'expression figée et dans l'expression défigée, il apparait avant les mots "la force soit" alors qu'il se place après ces mots là dans l'expression figée d'origine.
+On capture ce changement sans avoir besoin de faire annoter l'ordre des mots par les annotateurs. Dans l'exemple 4, "avec" n'aura pas la même place dans l'expression figée et dans l'expression défigée : il apparait AVANT les mots "la force soit" alors qu'il se place APRES ces mots là dans l'expression figée d'origine.
 
-ligne 9 tweet = Maître Yoda, qu'avec toi la force soit.
-ligne 10 seed = que la force soit avec toi
-ligne 11 Maître | Yoda | , | qu | avec | toi | la | force | soit
-ligne 12        |      |   | X  |  X   |  X  | X  |  X    |  X
+EXEMPLE 4
+ligne 1 tweet = Maître Yoda, qu'avec toi la force soit.
+ligne 2 seed = que la force soit avec toi
+ligne 3 Maître | Yoda | , | qu | avec | toi | la | force | soit
+ligne 4        |      |   | X  |  X   |  X  | X  |  X    |  X
 
-### Modification d'un mot qui donne un autre mot
+## Quelques cas complexes
 
-Quand on a un mot qui est modifié (et qu'on peut toujours reconnaitre) de manière à donner un autre mot, on peut l'annoter "MS", ce qui signifie modification + substitution.
+### Hésitation entre Substitution et Modification : pourquoi pas les deux ?
 
-ligne 13 tweet = Touche pas à mon despote
-ligne 14 seed = Touche pas à mon pote
-ligne 15 Touche | pas | à | mon | despote
-ligne 16   X    |  X  | X |  X  | MS:pote 
+Dans l'exemple 5, "les" doit-il être annoté comme Substitution (S) ou Modification (M) selon vous ? Si on reprend le raisonnement présenté pour l'exemple 2, on pourrait même annoter "les" avec les deux (MS). C'est cette dernière option que je choisirait personnelement, on a ainsi 2 informations d'annotées : le mot a été substitué par un autre mot MAIS ces deux mots sont proches.
 
-### Modification + addition
-
-ligne 17 tweet = Rachida garde plus les sceaux
-ligne 18 seed = garde des sceaux
-ligne 19 Rachida | garde | plus | les | sceaux
-ligne 20         |  X    |   A  |  M  |   X
+EXEMPLE 5
+ligne 1 tweet = Rachida garde plus les sceaux
+ligne 2 seed = garde des sceaux
+ligne 3 Rachida | garde | plus |   les    | sceaux
+ligne 4         |  X    |   I  |  MS:des  |   X
 
 ### Changement d'ordre des mots de l'énoncé + suppression de mots
 
-Il s'agit d'un cas extrême selon moi, avec une nouvelle expression qui nait de l'expression figée d'origine. La moitié de l'énoncé n'est plus présent, le verbe n'est plus le même et les mots ne sont plus dans le bon ordre. Dans ce genre de cas assez complexe, préciser quel mot est le substituant de quel mot est primordial. On le fait ainsi : "S:faut" indique que le mot annoté, "a", est le substituant du mot "faut"
+L'exemple 6 illustre un cas extrême selon moi, avec une nouvelle expression qui nait de l'expression figée d'origine. La moitié de l'énoncé n'est plus présent, le verbe n'est plus le même et les mots ne sont plus dans le bon ordre.
 
-ligne 21 tweet = Il n'a encore vendu que la peau de l'ours
-ligne 22 seed = il ne faut pas vendre la peau de l'ours avant de l'avoir tué
-ligne 23 Il | n |    a   | encore | que | vendu | la | peau | de | l | ours
-ligne 24 X  | X | S:faut |    A   |  A  |   X   |  X |   X  | X  | l | ours
+EXEMPLE 6
+ligne 1 tweet = Il n'a encore vendu que la peau de l'ours
+ligne 2 seed = il ne faut pas vendre la peau de l'ours avant de l'avoir tué
+ligne 3 Il | n |    a   | encore | que | vendu | la | peau | de | l | ours
+ligne 4 X  | X | S:faut |    I   |  I  |   X   |  X |   X  | X  | X |  X
 
 ### concaténation de deux mots en un seul mot
 
-Dans ce genre de cas, on peut préciser qu'il s'agit d'un mot subtituant deux mots : "S:sans+peur" mais il s'agit aussi d'un mot où l'on perçoit "sans" et "peur" donc on peut ajouter "M" : "SM:sans+peur"
+Dans L'exemple 7, on peut préciser qu'il s'agit d'un mot subtituant deux mots : "S:sans+peur". Là encore, annote-t-on "S:sans+peur" ou "MS:sans+peur" ? Après tout, "sans peur" et "sapeur" sont phonétiquement et graphiquement proches.
 
+EXEMPLE 7
 ligne 25 tweet = sapeur et sans reproche
 ligne 26 seed = sans peur et sans reproche
 ligne 27     Sapeur    | et | sans | reproche
-ligne 28  SM:sans+peur | X  |  X   |    X
+ligne 28 MS:sans+peur  | X  |  X   |    X
 
 ### un mot qui est remplacé par plusieurs mots
 
-Dans ce genre de cas, on a clairement des ajouts (le peuple français) qui se substituent à un mot (toi), donc on peut noter ainsi : "AS:toi", ce qui signifie ajout se substituant au mot "toi". Comme plusieurs mots se substituent au mot "toi", on annote tous ces mots avec ce procédé.
+Dans l'exemple 8, on a clairement un syntagme (le peuple français) qui se substitue à un mot (toi). Comme plusieurs mots se substituent au mot "toi", on annote tous ces mots de la même manière.
 
-ligne 29 tweet = que la force soit avec le peuple français
-ligne 30 seed = que la force soit avec toi
-ligne 31  que | la | force | soit | avec |   le   | peuple | français
-ligne 32   X  |  X |   X   |  X   |   X  | AS:toi | AS:toi |  AS:toi
+EXEMPLE 8
+ligne 1 tweet = que la force soit avec le peuple français
+ligne 2 seed = que la force soit avec toi
+ligne 3  que | la | force | soit | avec |   le   | peuple | français
+ligne 4   X  |  X |   X   |  X   |   X  |  S:toi | S:toi  |  S:toi
 
