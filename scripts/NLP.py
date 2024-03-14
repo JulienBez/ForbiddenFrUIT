@@ -27,3 +27,4 @@ def tokenizer(text):
   "tokenize everything in a given spacy object"
   text_sp = [i for i in sp(spacePunct(repBadChar(text).lower())) if i.pos_ != "SPACE"]
   return [noEmpty(word.text) for word in text_sp]
+
