@@ -39,7 +39,8 @@ def getUMWEannotatedROW(data):
   for seed in seeds:
     for k,v in data.items():
       if v["UMWE_identified"] and v["seed"] == seed:
-        tweet_line = f'''"tweet",{escape(v["tweet"])},\n"seed",{escape(v["seed"])},\n"{k}_tweet",{",".join(escape(i) for i in segmentWords(v["tweet"]))}\n"{k}_annot",\n"remarque"\n\n'''
+        tw = v["tweet"].replace("\n"," ").replace("\r"," ")
+        tweet_line = f'''"tweet",{escape(tw)},\n"seed",{escape(v["seed"])},\n"{k}_tweet",{",".join(escape(i) for i in segmentWords(v["tweet"]))}\n"{k}_annot",\n"remarque"\n\n'''
         umwes.append(tweet_line)
   return umwes
 
@@ -50,7 +51,8 @@ def getUMWEannotatedCOL(data):
   for seed in seeds:
     for k,v in data.items():
       if v["UMWE_identified"] and v["seed"] == seed:
-        tweet_line = f'''"id",{escape("'"+k)},\n"tweet",{escape(v["tweet"])},\n"seed",{escape(v["seed"])},\n'''
+        tw = v["tweet"].replace("\n"," ").replace("\r"," ")
+        tweet_line = f'''"id",{escape("'"+k)},\n"tweet",{escape(tw)},\n"seed",{escape(v["seed"])},\n'''
         segmented = segmentWords(v["tweet"])
         for word in segmented:
           tweet_line = tweet_line + f'''{escape(word)}\n'''
