@@ -6,8 +6,8 @@ def openJson(path):
     data = json.load(f)
   return data
 
-def listToCSV(data):
+def listToCSV(path,data):
   "convert list to csv"
-  with open("data/tweets_to_annotate.csv","w",encoding="UTF-8") as f:
+  with open(path,"w",encoding="UTF-8") as f:
     for line in data:
       f.write(line)

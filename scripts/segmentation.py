@@ -71,5 +71,8 @@ def getUMWEannotatedLINE(data):
 
 def createSamples(annotator_number=3):
   "create X exact same samples, X being the number of annotators"
+  counter = 0
   data = getUMWEannotatedCOL(openJson("data/control_tweets.json"))
-  listToCSV(data)
+  while counter < annotator_number:
+    listToCSV(f"data/csv/A{counter+1}_annotations.csv",data)
+    counter += 1
