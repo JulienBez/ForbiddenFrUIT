@@ -1,4 +1,4 @@
-# Consigne
+# APPLE - a FrUIT-based corpus
 
 Dans "guide/", le guide d'annotation au format PDF.
 
