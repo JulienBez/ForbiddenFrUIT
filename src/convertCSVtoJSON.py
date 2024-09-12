@@ -33,6 +33,7 @@ def getAnnotations(path):
 
   writeJson(path.replace("csv","json"),dict_annot)
 
+
 def control(path):
   "check if we have all the tweets"
   control_list = [k for k,v in openJson("data/control_tweets.json").items() if v["UMWE_identified"]==True]
@@ -41,6 +42,7 @@ def control(path):
     if i not in test_list:
       print(path)
       print(i)
+
 
 def convertSamples():
   "convert annotated samples from CSV to JSON"

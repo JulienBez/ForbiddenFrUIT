@@ -27,9 +27,11 @@ def segmentWords(string):
       
   return [s for s in string_list if s!="" and s!=" "]
 
+
 def escape(string):
   "helps to make a well formated csv file by escaping everything"
   return f'''"{string.replace('"', '""')}"'''
+
 
 def getUMWEannotated(data):
   "get every tweet annotated as containing an UMWE an put them in  columns"
@@ -46,6 +48,7 @@ def getUMWEannotated(data):
         tweet_line = tweet_line + "\n"
         umwes.append(tweet_line)
   return umwes
+
 
 def createSamples(annotator_number=3):
   "create X exact same samples, X being the number of annotators"
