@@ -4,7 +4,7 @@ Here, we introduce the annotations we made on the FrUIT corpus (see [here](https
 
 ## Data structure
 
-- **data/all** - contains all the annotations made during several annotations phases between 3 experts (A1, A2 and A3) ;
+- **data/all** - contains all the annotations made during the annotations phases between 3 experts (A1, A2 and A3) ;
 - **data/csv** - contains the generated **csv** files for the new annotation phase. Only contains PMWEs ;
 - **data/json** - contains the converted **csv** files from **data/csv** to **json** format for later use ;
 - **guide** - contains the annotation guidelines for the new annotation phase ;
