@@ -74,19 +74,19 @@ def computeConfusionMatrix(df,annotator_a,annotator_b):
     return cm,labels
 
 
-def saveConfusionMatrix(cm,labels,annotator_a,annotator_b,max=300,merge=False):
+def saveConfusionMatrix(com,cm,labels,annotator_a,annotator_b,max=300,merge=False):
     "iterate once to see the max value, then change it accordingly"
     sns.heatmap(cm, annot=True,fmt='d',cmap='Oranges',xticklabels=labels,yticklabels=labels,vmin=0,vmax=max)
     plt.xlabel(annotator_a)
     plt.ylabel(annotator_b)
     if merge:
-        plt.savefig(f"output/merged_confusion_matrix.png")
+        plt.savefig(f"output/{com}_merged_confusion_matrix.png")
     else:
-        plt.savefig(f"output/confusion_matrix_{annotator_a}_{annotator_b}.png")
+        plt.savefig(f"output/{com}_confusion_matrix_{annotator_a}_{annotator_b}.png")
     plt.close()
 
 
-def getConfusionMatrix():
+def getConfusionMatrix(com):
     "get confusion matrices between each possible pairs of annotators"
 
     data = openJson("data/annotation_matrix.json")
@@ -97,7 +97,7 @@ def getConfusionMatrix():
 
     for pair in pairs:
         cm,labels = computeConfusionMatrix(df,pair[0],pair[1])
-        saveConfusionMatrix(cm,labels,pair[0],pair[1],max=120)
+        saveConfusionMatrix(com,cm,labels,pair[0],pair[1],max=120)
 
     #print("Confusion Matrix between annotator_1 and annotator_2:\n", cm_1_2)
     #print("Confusion Matrix between annotator_2 and annotator_3:\n", cm_2_3)
@@ -124,13 +124,13 @@ def mergeConfusionMatrix(df,labels):
     return confusion_matrix(true_labels, pred_labels, labels=labels)
 
 
-def getMergedConfusionMatrix():
+def getMergedConfusionMatrix(com):
     ""
     data = openJson("data/annotation_matrix.json")
     df = pd.DataFrame.from_dict(data, orient='index')
     all_labels = np.unique(df.values.flatten())
     combined_cm = mergeConfusionMatrix(df,all_labels)
-    saveConfusionMatrix(combined_cm,all_labels,' ', ' ',max=800,merge=True)
+    saveConfusionMatrix(com,combined_cm,all_labels,' ', ' ',max=800,merge=True)
 
 
 def getInterAnnotatorAgreement():
@@ -155,27 +155,36 @@ def graphEchantillons(sample):
     annotators = ["A1","A2","A3","merge"]
     defigee = []
     reconnue = []
+    nope = []
     data = {**openJson("data/annotation_matrix.json"),**getMergeAnnotationRes(sample)}
     for anno in annotators:
         defi = 0
         reco = 0
+        no = 0
         for k,v in data[anno].items():
-            if v == "PMWE":
+            if v == "PMWE" or v == "EMM défigée":
                 defi += 1
-            if v == "MWE":
+            if v == "MWE" or v == "EMM":
                 reco += 1
+            if v == "None" or v == "pas d'EMM":
+                no += 1
         defigee.append(defi)
         reconnue.append(reco)
+        nope.append(no)
+    defigee = np.array(defigee)
+    reconnue = np.array(reconnue)
+    nope = np.array(nope)
     x_axis = np.arange(len(annotators))
     #plt.style.use('seaborn-paper')
     sns.set_theme()
-    plt.ylim(0, 100)
-    plt.bar(x_axis -0.2, defigee, width=0.4, label = 'identified UMWEs',color='coral')
-    plt.bar(x_axis +0.2, reconnue, width=0.4, label = 'Recognized expressions',color='cornflowerblue')
+    #plt.ylim(0, 100)
+    plt.bar(annotators, defigee, label = 'EMM défigées',color='coral')
+    plt.bar(annotators, reconnue, bottom=defigee, label = 'EMM',color='cornflowerblue')
+    plt.bar(annotators, nope, bottom=defigee+reconnue, label = 'None',color='limegreen')
     annotators[-1] = "Consensus"
     plt.xticks(x_axis, annotators)
     plt.legend()#loc='upper left' #bbox_to_anchor=(0.5, 0.98)
-    plt.savefig(f'output/annotation_{sample}.png',dpi=1000)
+    plt.savefig(f'output/annotation_{sample}.png')
     plt.close()
 
 
@@ -196,5 +205,5 @@ def getMetadata():
         graphEchantillons(com)
         countTotalAnnotations(com)
         getInterAnnotatorAgreement()
-    getConfusionMatrix() #for last annotation only (3B)
-    getMergedConfusionMatrix() #for last annotation only (3B)
+        getConfusionMatrix(com)
+        getMergedConfusionMatrix(com)
